@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Sora:wght@600;700;800&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: #f4f6fb;
+    color: #1e293b;
+    -webkit-font-smoothing: antialiased;
+  }
+  :root {
+    --sidebar-width: 240px;
+    --topbar-height: 64px;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-slate-100 p-5;
+  }
+  .btn-primary {
+    @apply bg-primary-600 text-white px-4 py-2 rounded-xl font-medium text-sm hover:bg-primary-700 transition-colors duration-150 flex items-center gap-2;
+  }
+  .btn-secondary {
+    @apply bg-white text-slate-700 border border-slate-200 px-4 py-2 rounded-xl font-medium text-sm hover:bg-slate-50 transition-colors duration-150 flex items-center gap-2;
+  }
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+  .badge-excellent { @apply badge bg-emerald-50 text-emerald-700; }
+  .badge-good { @apply badge bg-blue-50 text-blue-700; }
+  .badge-average { @apply badge bg-amber-50 text-amber-700; }
+  .badge-poor { @apply badge bg-red-50 text-red-700; }
+  .status-lead { @apply badge bg-orange-50 text-orange-700; }
+  .status-follow-up { @apply badge bg-blue-50 text-blue-700; }
+  .status-negotiation { @apply badge bg-purple-50 text-purple-700; }
+  .status-closed { @apply badge bg-green-50 text-green-700; }
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-600 hover:bg-primary-50 hover:text-primary-700 transition-all duration-150 font-medium text-sm cursor-pointer;
+  }
+  .sidebar-link.active {
+    @apply bg-primary-600 text-white hover:bg-primary-700 hover:text-white;
+  }
+  .kpi-card {
+    @apply card flex flex-col gap-3 animate-slide-up;
+  }
+  .input {
+    @apply bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-all;
+  }
+  .select {
+    @apply input appearance-none cursor-pointer pr-8 bg-white;
+  }
+}
+
+@layer utilities {
+  .font-display { font-family: 'Sora', sans-serif; }
+  .scrollbar-hide { scrollbar-width: none; -ms-overflow-style: none; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 to-violet-500 bg-clip-text text-transparent;
+  }
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 2px; }
+
+/* Animations */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-delay-100 { animation-delay: 100ms; }
+.animate-delay-200 { animation-delay: 200ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+.animate-delay-400 { animation-delay: 400ms; }
+
+/* Kanban cards */
+.kanban-card {
+  @apply bg-white rounded-xl border border-slate-100 p-3.5 shadow-sm hover:shadow-md transition-shadow duration-150 cursor-pointer;
+}
