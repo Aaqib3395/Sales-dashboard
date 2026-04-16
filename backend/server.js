@@ -3,19 +3,30 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
+const { authenticate } = require('./middleware/auth');
+
 const app = express();
 
 // Middleware
-app.use(cors({ origin: '*', credentials: false }));
+app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 
-// Routes
-app.use('/api/dashboard', require('./routes/dashboard'));
-app.use('/api/employees', require('./routes/employees'));
-app.use('/api/sales', require('./routes/sales'));
+// Public routes (no auth required)
+app.use('/api/auth', require('./routes/auth'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date() }));
+
+// Protected routes (auth required)
+app.use('/api/dashboard', authenticate, require('./routes/dashboard'));
+app.use('/api/employees', authenticate, require('./routes/employees'));
+app.use('/api/sales', authenticate, require('./routes/sales'));
+app.use('/api/notifications', require('./routes/notifications'));
+app.use('/api/analytics', require('./routes/analytics'));
+app.use('/api/clients', require('./routes/clients'));
+app.use('/api/goals', require('./routes/goals'));
+app.use('/api/activities', require('./routes/activities'));
+app.use('/api/users', require('./routes/users'));
 
 // Error handler
 app.use((err, req, res, next) => {

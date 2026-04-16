@@ -87,3 +87,47 @@
 .kanban-card {
   @apply bg-white rounded-xl border border-slate-100 p-3.5 shadow-sm hover:shadow-md transition-shadow duration-150 cursor-pointer;
 }
+
+/* Dark mode overrides */
+.dark .card {
+  @apply bg-slate-800 border-slate-700;
+}
+.dark .card h3, .dark .card h2, .dark .card p.font-semibold,
+.dark .card td.font-semibold, .dark .card span.font-semibold {
+  @apply text-slate-200;
+}
+.dark .kpi-card p.text-slate-800,
+.dark .kpi-card .text-2xl {
+  @apply text-white;
+}
+.dark .kanban-card {
+  @apply bg-slate-800 border-slate-700;
+}
+.dark .input {
+  @apply bg-slate-700 border-slate-600 text-slate-200 placeholder-slate-400;
+}
+.dark .btn-secondary {
+  @apply bg-slate-700 text-slate-200 border-slate-600 hover:bg-slate-600;
+}
+.dark table thead th {
+  @apply text-slate-400;
+}
+.dark table tbody tr {
+  @apply hover:bg-slate-700/50;
+}
+.dark table tbody td {
+  @apply text-slate-300;
+}
+.dark .sidebar-link {
+  @apply text-slate-400 hover:bg-slate-700 hover:text-slate-200;
+}
+.dark .sidebar-link.active {
+  @apply bg-primary-600 text-white;
+}
+
+/* Smooth theme transition */
+*, *::before, *::after {
+  transition-property: background-color, border-color;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
