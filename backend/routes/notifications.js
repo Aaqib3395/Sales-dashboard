@@ -23,6 +23,19 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
+// PATCH /api/notifications/read-all (must be before /:id routes)
+router.patch('/read-all', authenticate, async (req, res) => {
+  try {
+    await Notification.updateMany(
+      { $or: [{ userId: req.user._id }, { userId: null }], read: false },
+      { read: true }
+    );
+    res.json({ message: 'All notifications marked as read' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // PATCH /api/notifications/:id/read
 router.patch('/:id/read', authenticate, async (req, res) => {
   try {
@@ -33,19 +46,6 @@ router.patch('/:id/read', authenticate, async (req, res) => {
     );
     if (!notification) return res.status(404).json({ error: 'Not found' });
     res.json(notification);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// PATCH /api/notifications/read-all
-router.patch('/read-all', authenticate, async (req, res) => {
-  try {
-    await Notification.updateMany(
-      { $or: [{ userId: req.user._id }, { userId: null }], read: false },
-      { read: true }
-    );
-    res.json({ message: 'All notifications marked as read' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
