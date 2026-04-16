@@ -119,86 +119,85 @@ router.put('/preferences', authenticate, async (req, res) => {
   }
 });
 
-module.exports = router;
+// TEMPORARY: seed endpoint
 router.post('/seed-users', async (req, res) => {
   try {
-    const User = require('../models/User');
     const Client = require('../models/Client');
     const Notification = require('../models/Notification');
     const Activity = require('../models/Activity');
     const Goal = require('../models/Goal');
     const Employee = require('../models/Employee');
     const results = [];
+    const employees = await Employee.find();
 
     const userCount = await User.countDocuments();
     if (userCount === 0) {
-      const employees = await Employee.find();
       const users = [
         { name: 'Admin User', email: 'admin@flowtech.com', password: 'admin123', role: 'Admin' },
-        { name: 'Alex Johnson', email: 'alex.j@flowtech.com', password: 'manager123', role: 'Manager', team: 'Team Alpha', employeeId: employees.find(e => e.name === 'Alex Johnson')?._id },
-        { name: 'Sarah Mitchell', email: 'sarah.m@flowtech.com', password: 'sales123', role: 'Manager', team: 'Team Alpha', employeeId: employees.find(e => e.name === 'Sarah Mitchell')?._id },
-        { name: 'Marcus Chen', email: 'marcus.c@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Beta', employeeId: employees.find(e => e.name === 'Marcus Chen')?._id },
-        { name: 'Priya Sharma', email: 'priya.s@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Beta', employeeId: employees.find(e => e.name === 'Priya Sharma')?._id },
-        { name: 'Jake Williams', email: 'jake.w@flowtech.com', password: 'sales123', role: 'Manager', team: 'Team Gamma', employeeId: employees.find(e => e.name === 'Jake Williams')?._id },
-        { name: 'Elena Rodriguez', email: 'elena.r@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Gamma', employeeId: employees.find(e => e.name === 'Elena Rodriguez')?._id },
-        { name: 'David Kim', email: 'david.k@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Delta', employeeId: employees.find(e => e.name === 'David Kim')?._id },
-        { name: 'Amy Thompson', email: 'amy.t@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Delta', employeeId: employees.find(e => e.name === 'Amy Thompson')?._id },
-        { name: 'Ryan OBrien', email: 'ryan.o@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Alpha', employeeId: employees.find(e => e.name === "Ryan O'Brien")?._id },
-        { name: 'Nina Patel', email: 'nina.p@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Beta', employeeId: employees.find(e => e.name === 'Nina Patel')?._id },
-        { name: 'Carlos Mendez', email: 'carlos.m@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Gamma', employeeId: employees.find(e => e.name === 'Carlos Mendez')?._id },
-        { name: 'Lily Zhang', email: 'lily.z@flowtech.com', password: 'sales123', role: 'Manager', team: 'Team Delta', employeeId: employees.find(e => e.name === 'Lily Zhang')?._id },
+        { name: 'Alex Johnson', email: 'alex.j@flowtech.com', password: 'manager123', role: 'Manager', team: 'Team Alpha' },
+        { name: 'Sarah Mitchell', email: 'sarah.m@flowtech.com', password: 'sales123', role: 'Manager', team: 'Team Alpha' },
+        { name: 'Marcus Chen', email: 'marcus.c@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Beta' },
+        { name: 'Priya Sharma', email: 'priya.s@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Beta' },
+        { name: 'Jake Williams', email: 'jake.w@flowtech.com', password: 'sales123', role: 'Manager', team: 'Team Gamma' },
+        { name: 'Elena Rodriguez', email: 'elena.r@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Gamma' },
+        { name: 'David Kim', email: 'david.k@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Delta' },
+        { name: 'Amy Thompson', email: 'amy.t@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Delta' },
+        { name: 'Ryan OBrien', email: 'ryan.o@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Alpha' },
+        { name: 'Nina Patel', email: 'nina.p@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Beta' },
+        { name: 'Carlos Mendez', email: 'carlos.m@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Gamma' },
+        { name: 'Lily Zhang', email: 'lily.z@flowtech.com', password: 'sales123', role: 'Manager', team: 'Team Delta' },
       ];
       for (const u of users) { const user = new User(u); await user.save(); }
       results.push('Users: seeded 13');
-    } else {
-      results.push('Users: already exist (' + userCount + ')');
-    }
+    } else { results.push('Users: exist ' + userCount); }
 
     const clientCount = await Client.countDocuments();
     if (clientCount === 0) {
-      const clients = ['GlobalMart','TechVision Inc','Bright Solutions','Apex Corp','Blue Horizon','NextGen Ltd','Prime Goods','Summit Tech','Stellar Systems','Vanguard Co','Pinnacle Group','Echo Digital','Rapid Growth LLC','Titan Enterprises','Nova Analytics','Pulse Marketing'];
-      const clientDocs = clients.map(name => ({ name, company: name, email: 'contact@' + name.toLowerCase().replace(/\s+/g, '') + '.com', phone: '+1-555-' + String(Math.floor(Math.random() * 9000) + 1000), notes: 'Client record' }));
-      await Client.insertMany(clientDocs);
-      results.push('Clients: seeded ' + clientDocs.length);
-    } else {
-      results.push('Clients: already exist (' + clientCount + ')');
-    }
+      const names = ['GlobalMart','TechVision Inc','Bright Solutions','Apex Corp','Blue Horizon','NextGen Ltd','Prime Goods','Summit Tech','Stellar Systems','Vanguard Co','Pinnacle Group','Echo Digital','Rapid Growth LLC','Titan Enterprises','Nova Analytics','Pulse Marketing'];
+      const docs = names.map(n => ({ name: n, company: n, email: 'contact@' + n.toLowerCase().replace(/\s+/g, '') + '.com', phone: '+1-555-' + String(Math.floor(Math.random() * 9000) + 1000) }));
+      await Client.insertMany(docs);
+      results.push('Clients: seeded ' + docs.length);
+    } else { results.push('Clients: exist ' + clientCount); }
 
     const goalCount = await Goal.countDocuments();
     if (goalCount === 0) {
-      const employees = await Employee.find();
       const now = new Date();
-      const goalDocs = employees.map(emp => ({ employeeId: emp._id, type: 'monthly', targetAmount: emp.target, month: now.getMonth() + 1, year: now.getFullYear(), team: emp.team }));
-      await Goal.insertMany(goalDocs);
-      results.push('Goals: seeded ' + goalDocs.length);
-    } else {
-      results.push('Goals: already exist (' + goalCount + ')');
-    }
+      const docs = employees.map(e => ({ employeeId: e._id, type: 'monthly', targetAmount: e.target, month: now.getMonth() + 1, year: now.getFullYear(), team: e.team }));
+      await Goal.insertMany(docs);
+      results.push('Goals: seeded ' + docs.length);
+    } else { results.push('Goals: exist ' + goalCount); }
 
     const notifCount = await Notification.countDocuments();
     if (notifCount === 0) {
-      const notifs = [
+      await Notification.insertMany([
         { type: 'deal_closed', title: 'Deal Closed!', message: 'Alex Johnson closed a $12,000 deal with GlobalMart' },
         { type: 'deal_moved', title: 'Deal Advanced', message: 'TechVision Inc moved to Negotiation stage' },
-        { type: 'lead_assigned', title: 'New Lead Assigned', message: 'Hot lead Blue Horizon assigned to Marcus Chen' },
+        { type: 'lead_assigned', title: 'New Lead', message: 'Hot lead Blue Horizon assigned to Marcus Chen' },
         { type: 'target_alert', title: 'Target Warning', message: 'Priya Sharma is below 50% of monthly target' },
-        { type: 'deal_closed', title: 'Deal Closed!', message: 'Sarah Mitchell closed a $8,500 deal with Apex Corp' },
-      ];
-      await Notification.insertMany(notifs);
+        { type: 'deal_closed', title: 'Deal Closed!', message: 'Sarah Mitchell closed $8,500 deal with Apex Corp' },
+      ]);
       results.push('Notifications: seeded 5');
-    } else {
-      results.push('Notifications: already exist (' + notifCount + ')');
-    }
+    } else { results.push('Notifications: exist ' + notifCount); }
 
     const actCount = await Activity.countDocuments();
     if (actCount === 0) {
-      const employees = await Employee.find();
-      const activities = [
+      await Activity.insertMany([
         { employeeId: employees[0]?._id, action: 'deal_closed', description: 'Alex Johnson closed a deal with GlobalMart for $12,000', metadata: { team: 'Team Alpha', amount: 12000 } },
-        { employeeId: employees[2]?._id, action: 'status_changed', description: 'Marcus Chen moved TechVision Inc to Negotiation', metadata: { team: 'Team Beta', from: 'follow-up', to: 'negotiation' } },
+        { employeeId: employees[2]?._id, action: 'status_changed', description: 'Marcus Chen moved TechVision Inc to Negotiation', metadata: { team: 'Team Beta' } },
         { employeeId: employees[1]?._id, action: 'deal_created', description: 'Sarah Mitchell added new deal with Stellar Systems', metadata: { team: 'Team Alpha', amount: 6500 } },
-        { employeeId: employees[4]?._id, action: 'lead_added', description: 'New lead Rapid Growth LLC assigned to Jake Williams', metadata: { team: 'Team Gamma' } },
-        { employeeId: employees[3]?._id, action: 'deal_closed', description: 'Priya Sharma closed a deal with Blue Horizon for $9,200', metadata: { team: 'Team Beta', amount: 9200 } },
-        { employeeId: employees[5]?._id, action: 'deal_created', description: 'Elena Rodriguez added new deal with Echo Digital', metadata: { team: 'Team Gamma', amount: 7800 } },
-        { employeeId: employees[6]?._id, action: 'status_changed', description: 'David Kim moved Pinnacle Group to Follow-up', metadata: { team: 'Team Delta', from: 'lead', to: 'follow-up' } },
-        { employeeId: employees[7]?._id, action: 'deal_closed', description:
+        { employeeId: employees[4]?._id, action: 'lead_added', description: 'New lead assigned to Jake Williams', metadata: { team: 'Team Gamma' } },
+        { employeeId: employees[3]?._id, action: 'deal_closed', description: 'Priya Sharma closed deal with Blue Horizon for $9,200', metadata: { team: 'Team Beta', amount: 9200 } },
+        { employeeId: employees[5]?._id, action: 'deal_created', description: 'Elena Rodriguez added deal with Echo Digital', metadata: { team: 'Team Gamma', amount: 7800 } },
+        { employeeId: employees[6]?._id, action: 'status_changed', description: 'David Kim moved Pinnacle Group to Follow-up', metadata: { team: 'Team Delta' } },
+        { employeeId: employees[7]?._id, action: 'deal_closed', description: 'Amy Thompson closed deal with Nova Analytics for $15,300', metadata: { team: 'Team Delta', amount: 15300 } },
+        { employeeId: employees[8]?._id, action: 'lead_added', description: 'New lead Pulse Marketing assigned to Ryan OBrien', metadata: { team: 'Team Alpha' } },
+        { employeeId: employees[9]?._id, action: 'deal_closed', description: 'Nina Patel closed deal with Summit Tech for $11,400', metadata: { team: 'Team Beta', amount: 11400 } },
+      ]);
+      results.push('Activities: seeded 10');
+    } else { results.push('Activities: exist ' + actCount); }
+
+    res.json({ message: 'Seed complete', results });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+module.exports = router;
