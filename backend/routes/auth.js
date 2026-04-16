@@ -120,3 +120,17 @@ router.put('/preferences', authenticate, async (req, res) => {
 });
 
 module.exports = router;
+router.post('/seed-users', async (req, res) => {
+  try {
+    const User = require('../models/User');
+    const count = await User.countDocuments();
+    if (count > 0) return res.json({ message: 'Users already exist', count });
+    const users = [
+      { name: 'Admin User', email: 'admin@flowtech.com', password: 'admin123', role: 'Admin' },
+      { name: 'Alex Johnson', email: 'alex.j@flowtech.com', password: 'manager123', role: 'Manager', team: 'Team Alpha' },
+      { name: 'Sarah Mitchell', email: 'sarah.m@flowtech.com', password: 'sales123', role: 'Sales Rep', team: 'Team Alpha' },
+    ];
+    for (const u of users) { const user = new User(u); await user.save(); }
+    res.json({ message: 'Seeded 3 users successfully' });
+  } catch (err) { res.status(500).json({ error: err.message }); }
+});
