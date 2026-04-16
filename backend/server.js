@@ -24,13 +24,13 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: err.message || 'Internal Server Error' });
 });
 const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/sales_dashboard';
-console.log('ENV MONGODB_URI prefix:', MONGODB_URI.substring(0, 40));
+const MONGODB_URI = process.env.NODE_ENV === 'production' ? 'mongodb+srv://aaqib3395_db_user:Fd5G6TfbRsiC.jE@cluster0.dapmi65.mongodb.net/sales_dashboard?retryWrites=true&w=majority&appName=Cluster0' : (process.env.MONGODB_URI || 'mongodb://localhost:27017/sales_dashboard');
+console.log('ENV:', process.env.NODE_ENV, '| URI prefix:', MONGODB_URI.substring(0, 30));
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
     console.log('✅ MongoDB connected');
-    app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+    app.listen(PORT, () => console.log('🚀 Server running on port ' + PORT));
   })
   .catch((err) => {
     console.error('❌ MongoDB connection error:', err.message);
